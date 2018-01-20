@@ -1,12 +1,17 @@
 import React from 'react';
-import { Tabs, Button } from 'antd';
+import { Tabs, Button, Spin } from 'antd';
 import { GEO_OPTIONS } from '../constants'
 const TabPane = Tabs.TabPane;
 
 const operations = <Button>Extra Action</Button>;
 
 export class Home extends React.Component {
+    state = {
+        loadingGeoLocation: false,
+    }
+
     componentDidMount() {
+        this.setState({ loadingGeoLocation: true, error: ''});
         this.getGeoLocation();
     }
 
@@ -19,22 +24,32 @@ export class Home extends React.Component {
             );
         } else {
             /* geolocation IS NOT available */
+            this.setState({ error: 'Your browser does not support GeoLocation'});
         }
     }
 
     onSuccessLoadGeoLocation = (position) => {
         console.log(position);
+        this.setState({ loadingGeoLocation: false, error: ''});
     }
 
     onFailedLoadGeolocation = () => {
-
+        this.setState({ loadingGeoLocation: false, error: 'Failed to load GeoLocation!'});
     }
-
+    getGalleryPanelContent = () => {
+        if (this.state.error) {
+            return <div>{this.state.error}</div>;
+        } else if (this.state.loadingGeoLocation) {
+            return <Spin tip="Loading geo location..."/>;
+        } else {
+             return null;
+        }
+    }
     render() {
         return (
             <Tabs tabBarExtraContent={operations}>
                 <TabPane tab="Post" key="1">
-                Content of tab 1
+                    {this.getGalleryPanelContent()}
                 </TabPane>
                 <TabPane tab="Map" key="2">
                 Content of tab 2
