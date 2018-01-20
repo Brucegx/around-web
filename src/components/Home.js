@@ -6,7 +6,7 @@ const operations = <Button>Extra Action</Button>;
 
 export class Home extends React.Component {
     render() {
-        return
+        return (
             <Tabs tabBarExtraContent={operations}>
               <TabPane tab="Post" key="1">
                 Content of tab 1
@@ -14,6 +14,7 @@ export class Home extends React.Component {
               <TabPane tab="Map" key="2">
                 Content of tab 2
               </TabPane>
-            </Tabs>;
+            </Tabs>
+        );
     }
 }
