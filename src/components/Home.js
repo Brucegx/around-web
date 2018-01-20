@@ -6,15 +6,14 @@ const operations = <Button>Extra Action</Button>;
 
 export class Home extends React.Component {
     render() {
-        return <div>
+        return
             <Tabs tabBarExtraContent={operations}>
-              <TabPane tab="Tab 1" key="1">
+              <TabPane tab="Post" key="1">
                 Content of tab 1
               </TabPane>
-              <TabPane tab="Tab 2" key="2">
+              <TabPane tab="Map" key="2">
                 Content of tab 2
               </TabPane>
-            </Tabs>
-          </div>;
+            </Tabs>;
     }
 }
