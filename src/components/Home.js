@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs, Button, Spin } from 'antd';
-import { GEO_OPTIONS } from '../constants'
+import { GEO_OPTIONS, POS_KEY, AUTH_PREFIX, TOKEN_KEY, API_ROOT } from '../constants'
+import $ from 'jquery';
 const TabPane = Tabs.TabPane;
 
 const operations = <Button>Extra Action</Button>;
@@ -8,6 +9,8 @@ const operations = <Button>Extra Action</Button>;
 export class Home extends React.Component {
     state = {
         loadingGeoLocation: false,
+        loadingPosts: false,
+        error: '',
     }
 
     componentDidMount() {
@@ -31,6 +34,9 @@ export class Home extends React.Component {
     onSuccessLoadGeoLocation = (position) => {
         console.log(position);
         this.setState({ loadingGeoLocation: false, error: ''});
+        const { latitude, longitude } = position.coords;
+        localStorage.setItem('POS_KEY', JSON.stringify({lat: latitude, lon: longitude}));
+        this.loadNearbyPosts();
     }
 
     onFailedLoadGeolocation = () => {
@@ -41,10 +47,37 @@ export class Home extends React.Component {
             return <div>{this.state.error}</div>;
         } else if (this.state.loadingGeoLocation) {
             return <Spin tip="Loading geo location..."/>;
-        } else {
+        } else if (this.state.loadingPosts) {
+            return <Spin tip="Loading Post"/>;
+        } 
+        else {
              return null;
         }
     }
+
+    loadNearbyPosts = () => {
+        // const {lat, lon} = JSON.parse(localStorage.getItem(POS_KEY));
+        const lat = 37.7915953;
+        const lon = -122.3937977;
+        this.setState({loadingPosts: true });
+        // root/search?lat=1111&lon=1111
+        $.ajax({
+            url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20`,
+            method: 'GET',
+            headers: {
+                Authorization: `${AUTH_PREFIX} ${localStorage.getItem(TOKEN_KEY)}`
+            },
+        }).then((response) => {
+            this.setState({loadingPosts: false, error: '' });
+            console.log(response);
+        }, (error) => {
+            this.setState({loadingPosts: true, error: error.responseText });
+            console.log(error);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
     render() {
         return (
             <Tabs tabBarExtraContent={operations}>
