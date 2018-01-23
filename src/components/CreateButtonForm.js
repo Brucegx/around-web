@@ -3,6 +3,10 @@ import { Form, Input, Upload, Icon } from "antd";
 const FormItem = Form.Item;
 
 class createButtonForm extends React.Component {
+  beforeUpload = () => {
+   return false;
+ }
+
   normFile = (e) => {
     console.log('Upload event:', e);
     if (Array.isArray(e)) {
@@ -40,7 +44,7 @@ class createButtonForm extends React.Component {
               }
             ]
             })(
-              <Upload.Dragger name="files" action="/upload.do">
+              <Upload.Dragger name="files"  beforeUpload={this.beforeUpload}>
                 <p className="ant-upload-drag-icon">
                   <Icon type="inbox" />
                 </p>
