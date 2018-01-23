@@ -14,6 +14,11 @@ class createButtonForm extends React.Component {
     }
     return e && e.fileList;
   }
+
+  getWrapperForm = () => {
+   return this.props.form;
+ }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
