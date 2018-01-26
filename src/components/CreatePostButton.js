@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Button, message } from "antd";
-import { WrappedCreatePostForm } from "../components/CreateButtonForm";
+import { WrappedCreatePostForm } from "../components/CreatePostForm";
 import $ from "jquery";
 import { API_ROOT, POS_KEY, TOKEN_KEY, AUTH_PREFIX } from "../constants";
 
@@ -41,10 +41,10 @@ export class CreatePostButton extends React.Component {
        data: formData,
      }).then(() => {
        message.success('created a post successfully.');
-        this.form.resetFields();
+        form.resetFields();
      },(error) => {
        message.error(error.responseText);
-        this.form.resetFields();
+        form.resetFields();
      }).then(() => {
        this.props.loadNearbyPosts().then(() => {
            this.setState({ visible: false, confirmLoading: false });
