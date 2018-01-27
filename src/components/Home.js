@@ -86,8 +86,9 @@ export class Home extends React.Component {
     }
   };
 
-  loadNearbyPosts = () => {
-    const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+  loadNearbyPosts = (location, radius) => {
+    const { lat, lon } = location ? location : JSON.parse(localStorage.getItem(POS_KEY));
+    const rang = radius ? radius : 20;
     this.setState({ loadingPosts: true });
     // root/search?lat=1111&lon=1111
     return $.ajax({
@@ -129,6 +130,7 @@ export class Home extends React.Component {
             containerElement={<div style={{ height: `400px` }} />}
             mapElement={<div style={{ height: `100%` }} />}
             posts = {this.state.posts}
+            loadNearbyPosts = {this.loadNearbyPosts}
           />
         </TabPane>
       </Tabs>
